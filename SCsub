@@ -40,7 +40,7 @@ env_ffmpeg.GLSL_HEADER("yuv_to_rgb.glsl")
 env_ffmpeg.Depends(Glob("*.glsl.gen.h"), ["#glsl_builders.py"])
 
 # env_ffmpeg.Append(CPPDEFINES=["FFMPEG_MT_GPU_UPLOAD"])
-env_ffmpeg.Append(CPPDEFINES=["FFMPEG_DISABLE_GPU_YUV_UNWRAP"])
+# env_ffmpeg.Append(CPPDEFINES=["FFMPEG_DISABLE_GPU_YUV_UNWRAP"])
 if ARGUMENTS.get("ffmpeg_shared", "no") == "yes":
     # Shared lib compilation
     env_ffmpeg.Append(CCFLAGS=["-fPIC"])
