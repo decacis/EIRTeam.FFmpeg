@@ -157,7 +157,7 @@ Error VideoDecoder::recreate_codec_context() {
 	AVCodecParameters codec_params = *video_stream->codecpar;
 #ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	// YUV conversion needs rendering device
-	if (codec_params.format == AVPixelFormat::AV_PIX_FMT_YUV420P && RenderingServer::get_singleton()->get_rendering_device() && (Engine::get_singleton()->get_version_info().get("hex", 0x0) >= 0x040300)) {
+	if (codec_params.format == AVPixelFormat::AV_PIX_FMT_YUV420P && RenderingServer::get_singleton()->get_rendering_device() && (Engine::get_singleton()->get_version_info().get("hex", 0x0) >= Variant(0x040300))) {
 		frame_format = FFmpegFrameFormat::YUV420P;
 	} else {
 #endif
