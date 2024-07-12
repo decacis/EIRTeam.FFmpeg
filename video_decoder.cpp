@@ -36,8 +36,9 @@
 
 #ifdef GDEXTENSION
 #include "gdextension_build/gdex_print.h"
-#include <godot_cpp/classes/rendering_server.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/dictionary.hpp>
+#include <godot_cpp/classes/rendering_server.hpp>
 #endif
 
 extern "C" {
