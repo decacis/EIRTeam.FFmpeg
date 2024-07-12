@@ -451,6 +451,7 @@ void VideoDecoder::_read_decoded_frames(AVFrame *p_received_frame) {
 
 		last_decoded_frame_time.set(frame_time);
 
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 		if (frame_format == FFmpegFrameFormat::YUV420P) {
 			// Special path for YUV images
 			Ref<DecodedFrame> yuv_frame = _unwrap_yuv_frame(frame_time, frame);
@@ -461,6 +462,7 @@ void VideoDecoder::_read_decoded_frames(AVFrame *p_received_frame) {
 			decoded_frames_mutex.unlock();
 			continue;
 		}
+#endif
 
 		// Note: this is the pixel format that the video texture expects internally
 		frame = _ensure_frame_pixel_format(frame, AVPixelFormat::AV_PIX_FMT_RGBA);
