@@ -191,6 +191,7 @@ void FFmpegVideoStreamPlayback::update_internal(double p_delta) {
 	}
 #ifndef FFMPEG_MT_GPU_UPLOAD
 	if (got_new_frame) {
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 		// YUV conversion
 		if (last_frame->get_format() == FFmpegFrameFormat::YUV420P) {
 			Ref<Image> y_plane = last_frame->get_yuv_image_plane(0);
@@ -207,6 +208,7 @@ void FFmpegVideoStreamPlayback::update_internal(double p_delta) {
 			yuv_converter->convert();
 			// RGBA texture handling
 		} else if (texture.is_valid()) {
+#endif
 			if (texture->get_size() != last_frame_image->get_size() || texture->get_format() != last_frame_image->get_format()) {
 				ZoneNamedN(__img_upate_slow, "Image update slow", true);
 				texture->set_image(last_frame_image); // should never happen, but life has many doors ed-boy...
@@ -214,7 +216,9 @@ void FFmpegVideoStreamPlayback::update_internal(double p_delta) {
 				ZoneNamedN(__img_upate_fast, "Image update fast", true);
 				texture->update(last_frame_image);
 			}
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 		}
+#endif
 	}
 #endif
 
@@ -278,18 +282,21 @@ Error FFmpegVideoStreamPlayback::load(Ref<FileAccess> p_file_access) {
 	if (decoder->get_decoder_state() == VideoDecoder::FAULTED) {
 		return FAILED;
 	}
-
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	if (decoder->get_frame_format() == FFmpegFrameFormat::YUV420P) {
 		yuv_converter.instantiate();
 		yuv_converter->set_frame_size(size);
 		yuv_texture = yuv_converter->get_output_texture();
 	} else {
+#endif
 #ifdef GDEXTENSION
 		texture = ImageTexture::create_from_image(Image::create(size.x, size.y, false, Image::FORMAT_RGBA8));
 #else
 		texture = ImageTexture::create_from_image(Image::create_empty(size.x, size.y, false, Image::FORMAT_RGBA8));
 #endif
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	}
+#endif
 	return OK;
 }
 
@@ -343,9 +350,11 @@ Ref<Texture2D> FFmpegVideoStreamPlayback::get_texture_internal() const {
 #ifdef FFMPEG_MT_GPU_UPLOAD
 	return last_frame_texture;
 #else
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	if (yuv_converter.is_valid()) {
 		return yuv_converter->get_output_texture();
 	}
+#endif
 	return texture;
 #endif
 }
