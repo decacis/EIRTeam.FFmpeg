@@ -153,12 +153,16 @@ Error VideoDecoder::recreate_codec_context() {
 	}
 
 	AVCodecParameters codec_params = *video_stream->codecpar;
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	// YUV conversion needs rendering device
 	if (codec_params.format == AVPixelFormat::AV_PIX_FMT_YUV420P && RenderingServer::get_singleton()->get_rendering_device()) {
 		frame_format = FFmpegFrameFormat::YUV420P;
 	} else {
+#endif
 		frame_format = FFmpegFrameFormat::RGBA8;
+#ifndef FFMPEG_DISABLE_GPU_YUV_UNWRAP
 	}
+#endif
 	BitField<HardwareVideoDecoder> target_hw_decoders = hw_decoding_allowed ? target_hw_video_decoders : HardwareVideoDecoder::NONE;
 
 	Vector<AvailableDecoderInfo> available_video_decoders = get_available_video_decoders(format_context->iformat, codec_params.codec_id, target_hw_decoders);

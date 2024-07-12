@@ -68,6 +68,8 @@ if not env["verbose"]:
     methods.no_verbose(sys, env)
 
 env.Append(CPPDEFINES=["GDEXTENSION"])
+env.Append(CPPDEFINES=["FFMPEG_DISABLE_GPU_YUV_UNWRAP"])
+
 env.Append(CPPPATH=["../"])
 sources = Glob("../*.cpp")
 sources.extend(Glob("*.cpp"))
