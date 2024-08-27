@@ -1,4 +1,4 @@
-name: 🤖 Android Builds
+name: 🤖 Android 32 Builds
 on:
   workflow_call:
     inputs:
