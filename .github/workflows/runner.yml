@@ -47,6 +47,17 @@ jobs:
     uses: ./.github/workflows/android_builds.yml
     with:
       target: template_release
+
+  android-build-debug-arm32:
+    name: 🤖 Android Debug (arm-v7a)
+    uses: ./.github/workflows/android32_builds.yml
+    with:
+      target: template_debug 
+  android-build-release-arm32:
+    name: 🤖 Android Release (arm-v7a)
+    uses: ./.github/workflows/android32_builds.yml
+    with:
+      target: template_release
     
 
   static-checks:
@@ -55,7 +66,7 @@ jobs:
 
   publish_release:
     name: Publish release
-    needs: [windows-build-debug, windows-build-release, linux-build-debug, linux-build-release, android-build-debug-arm64, android-build-release-arm64]
+    needs: [windows-build-debug, windows-build-release, linux-build-debug, linux-build-release, android-build-debug-arm64, android-build-release-arm64, android-build-debug-arm32, android-build-release-arm32]
     runs-on: ubuntu-latest
     if: github.event.inputs.doRelease
     steps:
