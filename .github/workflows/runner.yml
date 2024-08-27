@@ -49,12 +49,12 @@ jobs:
       target: template_release
 
   android-build-debug-arm32:
-    name: 🤖 Android Debug (arm-v7a)
+    name: 🤖 Android 32 Debug (arm-v7a)
     uses: ./.github/workflows/android32_builds.yml
     with:
       target: template_debug 
   android-build-release-arm32:
-    name: 🤖 Android Release (arm-v7a)
+    name: 🤖 Android 32 Release (arm-v7a)
     uses: ./.github/workflows/android32_builds.yml
     with:
       target: template_release
